@@ -1,39 +1,28 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photos_app/screens/photo_screen_selected.dart';
 
 import 'package:photos_app/servises/fetch_photos_list.dart';
 
-class GrindScreenPhotos extends StatefulWidget {
-  const GrindScreenPhotos({Key? key}) : super(key: key);
+class GridScreenPhotos extends StatefulWidget {
+  const GridScreenPhotos({Key? key}) : super(key: key);
 
   @override
-  _GrindScreenPhotosState createState() => _GrindScreenPhotosState();
+  _GridScreenPhotosState createState() => _GridScreenPhotosState();
 }
 
-// Future _loadMoreItems() async {
-//   final totalItems = items.length;
-//   await Future.delayed(Duration(seconds: 3), () {
-//     for (var i = 0; i < _numItemsPage; i++) {
-//       items.add(Item('Item ${totalItems + i + 1}'));
-//     }
-//   });
-
-//   _hasMoreItems = items.length < _maxItems;
-// }
-
-class _GrindScreenPhotosState extends State<GrindScreenPhotos> {
+class _GridScreenPhotosState extends State<GridScreenPhotos> {
   late ScrollController _scrollController;
-//late Listener _scrollListener;
+
   int _itemsForNow = 10;
   int maxItems = photos.length;
   bool endOfStory = false;
+  bool isLoading = false;
 
-  // Listening for user scroll on screen.
   void _scrollListener() {
     if (_scrollController.offset ==
         _scrollController.position.maxScrollExtent) {
       setState(() {
-        print('Add 10');
         if (_itemsForNow != maxItems) {
           _itemsForNow += 10;
         } else {
@@ -57,6 +46,7 @@ class _GrindScreenPhotosState extends State<GrindScreenPhotos> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
       controller: _scrollController,
       child: Column(
         children: [
@@ -74,10 +64,15 @@ class _GrindScreenPhotosState extends State<GrindScreenPhotos> {
                             builder: (context) =>
                                 PhotoScreen(imagePath: photos[index])));
                   },
-                  child: Image.network(
-                    photos[index],
-                    errorBuilder: (context, error, stackTrace) =>
-                        Image.asset('noPhoto.png'),
+                  child: CachedNetworkImage(
+                    imageUrl: photos[index],
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                      child: CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                    ),
+                    errorWidget: (context, url, error) => GestureDetector(
+                        onTap: () {}, child: Image.asset('noPhoto.png')),
                   ),
                 );
               }),

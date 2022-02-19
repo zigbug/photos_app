@@ -6,27 +6,30 @@ class PhotoScreen extends StatelessWidget {
   final String imagePath;
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Image.network(
-          imagePath,
-          fit: BoxFit.cover,
-          height: double.infinity,
-          width: double.infinity,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: FloatingActionButton(
-              onPressed: () {
-                Share.share(imagePath, subject: 'Just take a look at this!');
-              },
-              child: const Icon(Icons.share),
-            ),
+    return Scaffold(
+      appBar: AppBar(),
+      body: Stack(
+        children: [
+          Image.network(
+            imagePath,
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
           ),
-        )
-      ],
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton(
+                onPressed: () {
+                  Share.share(imagePath, subject: 'Just take a look at this!');
+                },
+                child: const Icon(Icons.share),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
