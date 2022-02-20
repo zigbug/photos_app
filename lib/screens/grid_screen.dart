@@ -14,7 +14,7 @@ class GridScreenPhotos extends StatefulWidget {
 class _GridScreenPhotosState extends State<GridScreenPhotos> {
   late ScrollController _scrollController;
 
-  int _itemsForNow = 10;
+  int _itemsForNow = 20;
   int maxItems = photos.length;
   bool endOfStory = false;
   bool isLoading = false;
@@ -51,6 +51,7 @@ class _GridScreenPhotosState extends State<GridScreenPhotos> {
       child: Column(
         children: [
           GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: _itemsForNow,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
